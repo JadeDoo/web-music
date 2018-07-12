@@ -5,10 +5,18 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import fastclick from 'fastclick';
+import Axios from 'axios';
+import VueLazyLoad from 'vue-lazyload';
 
 import 'common/scss/index.scss';
 
 fastclick.attach(document.body);
+
+Vue.prototype.$axios = Axios;
+
+Vue.use(VueLazyLoad, {
+  loading: require('common/images/default.png')
+});
 
 Vue.config.productionTip = false;
 

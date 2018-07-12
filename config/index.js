@@ -10,7 +10,25 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/discList': {
+        // 调用接口的域名和端口号 实际值
+        target: 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg',
+        // secore:false,
+        changeOrigin: true,// 允许跨域
+        bypass: function (req, res, proxyOptions) {
+          req.headers.referer = 'https://c.y.qq.com';
+          req.headers.host = 'c.y.qq.com';
+        },
+        pathRewrite: {
+          '^/discList': ''// 定义要访问的路径的前缀
+        },
+        // headers: {
+        //   referer: 'https://y.qq.com/portal/playlist.html',
+        //   host: 'c.y.qq.com'
+        // }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
