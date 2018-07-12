@@ -94,7 +94,8 @@ export default {
           threshold: this.threshold,
           speed: this.speed
         },
-        bounce: false
+        bounce: false,
+        click: true
       });
 
       // bs 派发一个事件 scrollEnd 利用getCurrentPage方法获取当前页的index
