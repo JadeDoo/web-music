@@ -99,12 +99,12 @@ export default {
 
       // bs 派发一个事件 scrollEnd 利用getCurrentPage方法获取当前页的index
       this.slider.on("scrollEnd", () => {
-        let current = this.slider.getCurrentPage().pageX;
+        let currentPageIndex = this.slider.getCurrentPage().pageX;
 
         // console.log(current);
-        this.current = current;
-        if (current > 4) {
-          this.current = 0;
+        this.currentPageIndex = currentPageIndex;
+        if (currentPageIndex > 4) {
+          this.currentPageIndex = 0;
           // this.slider.getCurrentPage().pageX = 0;
         }
         if (this.autoPlay) {
