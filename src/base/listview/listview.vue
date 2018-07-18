@@ -1,11 +1,11 @@
 <template>
   <scroll class="listview" :data="data" ref="listview" :listenScroll="listenScroll" :probeType="probeType" @scroll="scroll">
     <ul>
-      <li v-for="(group,index) in data" class="list-group" :key="index" ref='listGroup'>
+      <li v-for="(group,index) in data" class="list-group needsclick" :key="index" ref='listGroup'>
         <h2 class="list-group-tag">{{group.tag}}</h2>
         <ul>
-          <li v-for="(singer,index) in group.items" :key="index" class="list-group-singer">
-              <img v-lazy="singer.avatar" class="avatar">
+          <li v-for="(singer,index) in group.items" :key="index" class="list-group-singer needsclick" @click="selectSinger(singer)">
+            <img v-lazy="singer.avatar" class="avatar needsclick">
             <div class="name">{{singer.name}}</div>
           </li>
         </ul>
@@ -101,6 +101,10 @@ export default {
         height += el.clientHeight;
         this.listHeight.push(height);
       }
+    },
+    selectSinger(singer) {
+      // console.log(1);
+      this.$emit("selected", singer);
     }
   },
   watch: {

@@ -1,6 +1,7 @@
 <template>
   <div class="singer">
-    <list-view :data="singers"></list-view>
+    <list-view :data="singers" @selected="selectSinger"></list-view>
+    <router-view />
   </div>
 </template>
 
@@ -8,6 +9,7 @@
 import { getSingerList } from "@/api/singer.js";
 import { ERR_OK } from "@/api/config.js";
 import ListView from "@/base/listview/listview";
+import { mapMutations } from "vuex";
 
 const HOT_NAME = "热门";
 const HOT_SINGER_LEN = 10;
@@ -22,6 +24,13 @@ export default {
     this._getSingerList();
   },
   methods: {
+    selectSinger(singer) {
+      // console.log(singer);
+      this.$router.push({
+        path: `/singer/${singer.id}`
+      });
+      this.setSinger(singer);
+    },
     _getSingerList() {
       getSingerList().then(res => {
         if (res.code === ERR_OK) {
@@ -41,7 +50,7 @@ export default {
         var oTemp = {
           id: singer.Fsinger_mid,
           name: singer.Fsinger_name,
-          avatar: `http://y.gtimg.cn/music/photo_new/T001R150x150M000${
+          avatar: `http://y.gtimg.cn/music/photo_new/T001R500x500M000${
             singer.Fsinger_mid
           }.jpg?max_age=2592000`
         };
@@ -77,7 +86,10 @@ export default {
       mapArr.unshift(map.hot);
       // console.log(mapArr);
       return mapArr;
-    }
+    },
+    ...mapMutations({
+      setSinger: "SET_SINGER"
+    })
   },
   components: {
     ListView

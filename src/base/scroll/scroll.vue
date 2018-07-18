@@ -14,7 +14,7 @@ export default {
     },
     click: {
       type: Boolean,
-      true: true
+      default: true
     },
     data: {
       type: Array,
@@ -43,6 +43,9 @@ export default {
       if (this.listenScroll) {
         let that = this;
         this.scroll.on("scroll", pos => {
+          if (that.timer) {
+            clearTimeout(that.timer);
+          }
           that.$emit("scroll", pos);
         });
       }
