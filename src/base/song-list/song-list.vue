@@ -1,7 +1,7 @@
 <template>
   <div class="song-list">
     <ul>
-      <li v-for="(song,index) in songs" :key="index" class="song">
+      <li @click="selected(song,index)" v-for="(song,index) in songs" :key="index" class="song">
         <div class="content">
           <h2 class="name">{{song.name}}</h2>
           <p class="desc">{{getDesc(song)}}</p>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Scroll from "@/base/scroll/scroll";
+// import Scroll from "@/base/scroll/scroll";
 export default {
   props: {
     songs: {
@@ -23,10 +23,10 @@ export default {
   methods: {
     getDesc(song) {
       return `${song.singer}·${song.album}`;
+    },
+    selected(song, index) {
+      this.$emit("selected", song, index);
     }
-  },
-  components: {
-    Scroll
   }
 };
 </script>
@@ -35,22 +35,22 @@ export default {
 @import "common/scss/variable.scss";
 @import "common/scss/mixin.scss";
 
-.song-list{
-  .song{
+.song-list {
+  .song {
     display: flex;
     align-items: center;
     box-sizing: border-box;
     height: 64px;
     font-size: $font-size-medium;
-    .content{
+    .content {
       flex: 1;
       line-height: 20px;
       overflow: hidden;
-      .name{
+      .name {
         @include no-wrap();
         color: $color-text;
       }
-      .desc{
+      .desc {
         @extend .name;
         margin-top: 4px;
         color: $color-text-d;

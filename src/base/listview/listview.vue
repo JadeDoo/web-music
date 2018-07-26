@@ -74,6 +74,9 @@ export default {
       // console.log(tagIndex);
       this._scrollTo(tagIndex);
     },
+    refresh() {
+      this.$refs.listview.refresh();
+    },
     scroll(pos) {
       this.scrollY = pos.y;
       // console.log(this.scrollY);

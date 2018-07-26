@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapper">
+  <div ref="wrapper" class="scroll">
     <slot></slot>
   </div>
 </template>
@@ -43,6 +43,7 @@ export default {
       if (this.listenScroll) {
         let that = this;
         this.scroll.on("scroll", pos => {
+          // console.log(this);
           if (that.timer) {
             clearTimeout(that.timer);
           }
@@ -50,7 +51,8 @@ export default {
         });
       }
       window.addEventListener("resize", () => {
-        this.refresh();
+        // console.log(this.scroll);
+        this.scroll.refresh();
       });
     },
     enable() {

@@ -6,7 +6,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getSingerDetail } from "@/api/singer.js";
+import { getSingerDetail, getSongVkey } from "@/api/singer.js";
 import { ERR_OK } from "@/api/config.js";
 import { createSong } from "@/common/js/song.js";
 import MusicList from "@/components/music-list/music-list";
@@ -39,7 +39,7 @@ export default {
         if (res.code === ERR_OK) {
           // console.log(res.data.list);
           this.songs = this._mapSong(res.data.list);
-          console.log(this.songs);
+          // console.log(this.songs);
         }
       });
     },
@@ -49,7 +49,11 @@ export default {
         // 将el中的musicData赋值给musicData
         let { musicData } = el;
         if (musicData.songid && musicData.albummid) {
-          temp.push(createSong(musicData));
+          // console.log(musicData.songmid);
+          // 调用 获取 vkey guid
+          getSongVkey(musicData.songmid).then(({vkey, guid}) => {
+            temp.push(createSong(musicData, vkey, guid));
+          });
         }
       });
       return temp;

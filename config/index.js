@@ -27,6 +27,33 @@ module.exports = {
         //   referer: 'https://y.qq.com/portal/playlist.html',
         //   host: 'c.y.qq.com'
         // }
+      },
+      '/songVkey': {
+        target: 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg',
+        changeOrigin: true,
+        // headers: {
+        //   referer: 'https://y.qq.com/portal/player.html',
+        //   host: 'c.y.qq.com'
+        // },
+        bypass: function (req, res, proxyOptions) {
+          //   referer: 'https://y.qq.com/portal/player.html',
+          req.headers.referer = 'https://c.y.qq.com';
+          req.headers.host = 'c.y.qq.com';
+        },
+        pathRewrite: {
+          '^/songVkey': ''
+        }
+      },
+      '/lyric': {
+        target: 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg',
+        changeOrigin: true,
+        bypass: function (req) {
+          req.headers.referer = 'https://c.y.qq.com';
+          req.headers.host = 'c.y.qq.com';
+        },
+        pathRewrite: {
+          '^/lyric': ''
+        }
       }
     },
 

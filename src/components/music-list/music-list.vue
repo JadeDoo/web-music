@@ -7,7 +7,7 @@
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="filter" ref="filter"></div>
       <div class="play-wrapper">
-        <div class="play" v-show="songs.length>0" ref="play-btn">
+        <div @click="playRandom" class="play" v-show="songs.length>0" ref="play-btn">
           <i class="icon-play"></i>
           <span class="text">全部播放</span>
         </div>
@@ -15,8 +15,8 @@
     </div>
     <div class="bg-layer" ref="layer"></div>
     <scroll @scroll="scroll" :data="songs" :probe-type="probeType" :listen-scroll="listenScroll" class="list" ref="list">
-      <div class="song-list-wrapper" ref="">
-        <song-list :songs="songs"></song-list>
+      <div class="song-list-wrapper">
+        <song-list @selected="selected" :songs="songs"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
@@ -29,7 +29,11 @@
 import Scroll from "@/base/scroll/scroll";
 import SongList from "@/base/song-list/song-list";
 import Loading from "@/base/loading/loading";
+import { mapActions } from "vuex";
+import { playlistMixin } from "@/common/js/mixins.js";
+// import { getSongVkey } from "@/api/singer.js";
 export default {
+  mixins: [playlistMixin],
   props: {
     bgImage: {
       type: String,
@@ -59,12 +63,31 @@ export default {
     this.$refs.list.$el.style.top = `${this.imageHeight}px`;
   },
   methods: {
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? "60px" : "";
+      this.$refs.list.$el.style.bottom = bottom;
+      this.$refs.list.refresh();
+    },
     scroll(pos) {
       this.scrollY = pos.y;
     },
     back() {
       this.$router.back();
-    }
+    },
+    selected(song, index) {
+      let list = [...this.songs];
+      this.selectPlay({
+        list,
+        index
+      });
+    },
+    playRandom() {
+      let list = [...this.songs];
+      this.randomPlayAll({
+        list
+      });
+    },
+    ...mapActions(["selectPlay", "randomPlayAll"])
   },
   computed: {
     bgStyle() {
@@ -79,9 +102,7 @@ export default {
       let scale = 1;
       let blur = 0;
       const percent = Math.abs(newY / this.imageHeight);
-      this.$refs.layer.style[
-        "transform"
-      ] = `translate3d(0,${maxTranslate}px,0)`;
+      this.$refs.layer.style["transform"] = `translate3d(0,${maxTranslate}px,0)`;
       if (newY > 0) {
         scale = 1 + percent;
         zIndex = 10;
@@ -93,11 +114,11 @@ export default {
         this.$refs.bgImage.style.paddingTop = 0;
         this.$refs.bgImage.style.height = 40 + "px";
         // console.log(this.$refs['play-btn']);
-        this.$refs['play-btn'].style.display = "none";
+        this.$refs["play-btn"].style.display = "none";
       } else {
         this.$refs.bgImage.style.paddingTop = "70%";
         this.$refs.bgImage.style.height = 0;
-        this.$refs['play-btn'].style.display = '';
+        this.$refs["play-btn"].style.display = "";
       }
       this.$refs.bgImage.style.zIndex = zIndex;
       this.$refs.bgImage.style["transform"] = `scale(${scale})`;
@@ -204,6 +225,7 @@ export default {
     bottom: 0;
     width: 100%;
     background: $color-background;
+    z-index: 5;
     .song-list-wrapper {
       padding: 20px 30px;
     }
