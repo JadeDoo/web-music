@@ -54,6 +54,17 @@ module.exports = {
         pathRewrite: {
           '^/lyric': ''
         }
+      },
+      '/disc': {
+        target: 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',
+        changeOrigin: true,
+        bypass: function (req) {
+          req.headers.referer = 'https://y.qq.com/n/yqq/playsquare/4179246939.html';
+          req.headers.host = 'c.y.qq.com';
+        },
+        pathRewrite: {
+          '^/disc': ''
+        }
       }
     },
 

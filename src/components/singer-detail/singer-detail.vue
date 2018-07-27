@@ -6,7 +6,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getSingerDetail, getSongVkey } from "@/api/singer.js";
+import { getSingerDetail } from "@/api/singer.js";
+import { getSongVkey } from "@/api/song.js";
 import { ERR_OK } from "@/api/config.js";
 import { createSong } from "@/common/js/song.js";
 import MusicList from "@/components/music-list/music-list";

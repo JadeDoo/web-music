@@ -52,3 +52,31 @@ export function getDiscList() {
     return Promise.resolve(res.data);
   });
 };
+
+export function getSongList(disstid) {
+  const url = "/disc";
+  const data = Object.assign({}, commonParams, {
+    type: 1,
+    json: 1,
+    utf8: 1,
+    onlysong: 0,
+    disstid: disstid,
+    format: 'json',
+    g_tk: 5381,
+    // jsonpCallback: 'playlistinfoCallback',
+    loginUin: 0,
+    hostUin: 0,
+    inCharset: 'utf-8',
+    outCharset: 'utf-8',
+    notice: 0,
+    platform: 'yqq',
+    needNewCode: 0
+  });
+  // console.log(data);
+  return Axios.get(url, {
+    params: data
+  }).then((res) => {
+    let temp = res.data;
+    return Promise.resolve(temp);
+  });
+}
