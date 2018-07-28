@@ -16,7 +16,7 @@
     <div class="bg-layer" ref="layer"></div>
     <scroll @scroll="scroll" :data="songs" :probe-type="probeType" :listen-scroll="listenScroll" class="list" ref="list">
       <div class="song-list-wrapper">
-        <song-list @selected="selected" :songs="songs"></song-list>
+        <song-list :isRank="isRank" @selected="selected" :songs="songs"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
@@ -46,6 +46,10 @@ export default {
     title: {
       type: String,
       default: ""
+    },
+    isRank: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

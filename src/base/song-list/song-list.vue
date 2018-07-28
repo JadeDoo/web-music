@@ -2,6 +2,9 @@
   <div class="song-list">
     <ul>
       <li @click="selected(song,index)" v-for="(song,index) in songs" :key="index" class="song">
+        <div class="rank" v-show="isRank">
+          <span class="text" :class="index<3?'top':''">{{index+1}}</span>
+        </div>
         <div class="content">
           <h2 class="name">{{song.name}}</h2>
           <p class="desc">{{getDesc(song)}}</p>
@@ -18,6 +21,10 @@ export default {
     songs: {
       type: Array,
       default: null
+    },
+    isRank: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -42,6 +49,18 @@ export default {
     box-sizing: border-box;
     height: 64px;
     font-size: $font-size-medium;
+    .rank {
+      flex: 0 0 25px;
+      // padding-right: 20px;
+      width: 25px;
+      margin-right: 20px;
+      text-align: center;
+      font-size: $font-size-large;
+      .top {
+        font-size: $font-size-large-x;
+        color: $color-theme;
+      }
+    }
     .content {
       flex: 1;
       line-height: 20px;
