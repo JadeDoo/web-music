@@ -23,6 +23,15 @@ export default {
     listenScroll: {
       type: Boolean,
       default: false
+    },
+    // 下拉刷新
+    pullup: {
+      type: Boolean,
+      default: false
+    },
+    beforeScroll: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -48,6 +57,21 @@ export default {
             clearTimeout(that.timer);
           }
           that.$emit("scroll", pos);
+        });
+      }
+
+      if (this.pullup) {
+        this.scroll.on("scrollEnd", () => {
+          console.log(this.scroll.maxScrollY);
+          if (this.scroll.y <= this.scroll.maxScrollY + 50) {
+            this.$emit("scrollToEnd");
+          }
+        });
+      }
+
+      if (this.beforeScroll) {
+        this.scroll.on("beforeScrollStart", () => {
+          this.$emit("beforeScroll");
         });
       }
       window.addEventListener("resize", () => {

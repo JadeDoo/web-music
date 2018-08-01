@@ -29,7 +29,7 @@
               <div>
                 <div v-if="!currentLyric" class="no-lyric">正在搜索歌词...</div>
                 <div v-else>
-                  <p ref="lyric" :class="{'current':currentLine===index}" class="lyric" v-for="(lyric,index) in currentLyric.lines" :key="lyric.time">{{lyric.txt}}</p>
+                  <p ref="lyric" :class="{'current':currentLine===index}" class="lyric" v-for="(lyric,index) in currentLyric.lines" :key="index">{{lyric.txt}}</p>
                 </div>
               </div>
             </scroll>
@@ -84,6 +84,7 @@
         </div>
       </div>
     </transition>
+    <div class="error" v-show="isError">应版权方要求暂不能播放，玩命我也争取不到:）</div>
     <audio @ended="end" @canplay="ready" @error="error" @timeupdate="update" :src="currentSong.url" ref="audio"></audio>
   </div>
 </template>
@@ -104,7 +105,8 @@ export default {
       currentLyric: null,
       isLyric: false,
       currentLine: 0,
-      playingLyric: "正在搜索歌词..."
+      playingLyric: "正在搜索歌词...",
+      isError: false
     };
   },
   computed: {
@@ -186,6 +188,11 @@ export default {
     },
     error() {
       this.songReady = true;
+      this.isError = true;
+      setTimeout(() => {
+        this.next();
+        this.isError = false;
+      }, 500);
     },
     update(e) {
       this.currentTime = e.target.currentTime;
@@ -580,6 +587,15 @@ export default {
         transform: translate(-50%, -50%);
       }
     }
+  }
+  .error {
+    position: fixed;
+    top: 50%;
+    width: 70%;
+    left: 40%;
+    background: rgba(0, 0, 0, 0.5);
+    height: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 

@@ -42,7 +42,7 @@ export function createSong(musicData, vkey, guid) {
     duration: musicData.interval,
     image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
     // http://dl.stream.qqmusic.qq.com/C400003kLvu04bLGzi.m4a?vkey=vkey&guid=5471825440&uin=0&fromtag=66
-    url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}.m4a?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`
+    url: !vkey ? '' : `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}.m4a?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`
   });
 }
 

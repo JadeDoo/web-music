@@ -28,6 +28,10 @@ const mutations = {
   },
   [types.SET_TOP_LIST](state, topList) {
     state.topList = topList;
+  },
+  [types.SET_SEARCH_HISTORY](state, history) {
+    // let setTemp = new Set([history, ...state.searchHistory]);
+    state.searchHistory = history;
   }
 };
 
