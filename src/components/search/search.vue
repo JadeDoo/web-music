@@ -3,9 +3,10 @@
     <div class="seaer-input-wrapper">
       <search-input @inputed="onQueryStringChange" ref="search-input"></search-input>
     </div>
-    <div class="shortcut-wrapper" v-show="!queryString">
-      <div class="shortcut">
-        <div class="hotkey-wrapper">
+    <div class="shortcut-wrapper" v-show="!queryString" ref="shortcut-wrapper">
+      <scroll class="shortcut" :data="shortcut" ref="shortcut">
+        <div>
+          <div class="hotkey-wrapper">
           <h1 class="title">热门搜索</h1>
           <ul>
             <li @click="addQueryString(hotkey.k)" class="hotkey" v-for="(hotkey,index) in hotKeys" :key="index">
@@ -16,17 +17,20 @@
         <div class="search-history" v-show="searchHistory.length">
           <h1 class="title">
             <span class="text">搜索历史</span>
-            <span class="clear" @click="clearHistory">
+            <span class="clear" @click="showConfirm">
               <i class="icon-clear"></i>
             </span>
           </h1>
           <search-list @selected="addQueryString" @deleteItem="deleteItem" :searches="searchHistory"></search-list>
         </div>
-      </div>
+        </div>
+      </scroll>
     </div>
     <div class="search-result" v-show="queryString" ref="search-result">
       <suggest @selected="saveQueryString" @scrollStart="scrollStart" ref="suggest" :queryString="queryString"></suggest>
     </div>
+    <confirm @confirm="clearHistory" ref="confirm" text="是否清空所有历史纪录"></confirm>
+    <!-- <top-tip ref="top-tip"></top-tip> -->
     <router-view></router-view>
   </div>
 </template>
@@ -36,47 +40,44 @@ import SearchInput from "@/base/search-input/search-input";
 import { getHotKey } from "@/api/search.js";
 import { ERR_OK } from "@/api/config.js";
 import Suggest from "@/components/suggest/suggest";
-import { playlistMixin } from "@/common/js/mixins.js";
-import { mapActions, mapGetters, mapMutations } from "vuex";
+import { playlistMixin, searchMixin } from "@/common/js/mixins.js";
+import { mapActions, mapMutations } from "vuex";
 import SearchList from "@/base/search-list/search-list";
+import Confirm from "@/base/confirm/confirm";
+// import TopTip from "@/base/top-tip/top-tip";
+import Scroll from "@/base/scroll/scroll";
 export default {
-  mixins: [playlistMixin],
+  mixins: [playlistMixin, searchMixin],
   data() {
     return {
       hotKeys: [],
-      queryString: ""
+      confirm: false
     };
   },
   created() {
     this._getHotKey();
   },
   computed: {
-    ...mapGetters(["searchHistory"])
+    shortcut() {
+      return this.hotKeys.concat(this.searchHistory);
+    }
   },
   methods: {
     handlePlaylist(playlist) {
       const bottom = playlist.length > 0 ? "60px" : "";
 
       this.$refs["search-result"].style.bottom = bottom;
-      this.$refs.suggest.refresh();
+      this.$refs["shortcut-wrapper"].style.bottom = bottom;
+      this.$refs["suggest"].refresh();
+      this.$refs["shortcut"].refresh();
     },
-    scrollStart() {
-      this.$refs["search-input"].inputBlur();
+    showConfirm() {
+      this.$refs.confirm.toggleShow();
     },
-    addQueryString(item) {
-      // console.log(hotkey.k);
-      this.$refs["search-input"].setQueryString(item);
-    },
-    onQueryStringChange(queryString) {
-      this.queryString = queryString;
-    },
-    saveQueryString() {
-      this.saveSearchHistory(this.queryString);
-    },
-    deleteItem(item) {
-      this.deleteSearchHistory(item);
-    },
-    clearHistory() {
+    clearHistory(bool) {
+      if (!bool) {
+        return;
+      }
       this.clearSearchHistory();
     },
     _getHotKey() {
@@ -90,16 +91,24 @@ export default {
     ...mapMutations({
       setSearchHistory: "SET_SEARCH_HISTORY"
     }),
-    ...mapActions([
-      "saveSearchHistory",
-      "deleteSearchHistory",
-      "clearSearchHistory"
-    ])
+    ...mapActions(["clearSearchHistory"])
+  },
+  watch: {
+    queryString(newVal) {
+      if (!newVal) {
+        setTimeout(() => {
+          this.$refs.shortcut.refresh();
+        }, 20);
+      }
+    }
   },
   components: {
     SearchInput,
     Suggest,
-    SearchList
+    SearchList,
+    Confirm,
+    Scroll
+    // TopTip
   }
 };
 </script>

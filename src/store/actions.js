@@ -1,7 +1,7 @@
 import * as types from './mutation-types';
 import { playMode } from './../common/js/config';
 import { randomList } from './../common/js/util';
-import { saveSearch, deleteSearch, clearSearch } from './../common/js/cache';
+import { saveSearch, deleteSearch, clearSearch, savePlay } from './../common/js/cache';
 export const selectPlay = function ({ commit, state }, { list, index }) {
   commit(types.SET_SEQUENCE_LIST, list);
   if (state.mode === playMode.random) {
@@ -48,10 +48,10 @@ export const insertSong = function ({ commit, state }, song) {
   // 如果有这首歌曲，处理之前的歌曲
   if (songInPlaylist > -1) {
     if (currentIndex > songInPlaylist) {
-      playlist.slice(songInPlaylist, 1);
+      playlist.splice(songInPlaylist, 1);
       currentIndex--;
     } else {
-      playlist.slice(songInPlaylist + 1, 1);
+      playlist.splice(songInPlaylist + 1, 1);
     }
   }
 
@@ -63,13 +63,13 @@ export const insertSong = function ({ commit, state }, song) {
     return item.id === song.id;
   });
 
-  sequencelist.slice(currentInSequencelist + 1, 0, song);
+  sequencelist.splice(currentInSequencelist + 1, 0, song);
   // 如果有这首歌曲，处理之前的歌曲
   if (songInSequencelist > -1) {
     if (currentInSequencelist + 1 > songInSequencelist) {
-      sequencelist.slice(songInSequencelist, 1);
+      sequencelist.splice(songInSequencelist, 1);
     } else {
-      sequencelist.slice(songInSequencelist + 1, 1);
+      sequencelist.splice(songInSequencelist + 1, 1);
     }
   }
 
@@ -78,6 +78,34 @@ export const insertSong = function ({ commit, state }, song) {
   commit(types.SET_CURRENT_INDEX, currentIndex);
   commit(types.SET_FULL_SCREEN, true);
   commit(types.SET_PLAYING_STATE, true);
+};
+
+export const deleteSong = function ({ commit, state }, song) {
+  // 获取当前的的播放列表
+  let playlist = [...state.playlist];
+  // 获取当前的歌曲原始数据
+  let sequencelist = [...state.sequencelist];
+  let currentIndex = state.currentIndex;
+
+  let playlistIndex = playlist.findIndex(item => {
+    return song.id === item.id;
+  });
+  let sequencelistIndex = sequencelist.findIndex(item => {
+    return song.id === item.id;
+  });
+  playlist.splice(playlistIndex, 1);
+  sequencelist.splice(sequencelistIndex, 1);
+
+  if (currentIndex > playlistIndex || currentIndex === playlist.length) {
+    currentIndex--;
+  }
+
+  commit(types.SET_PLAYLIST, playlist);
+  commit(types.SET_SEQUENCE_LIST, sequencelist);
+  commit(types.SET_CURRENT_INDEX, currentIndex);
+  if (!playlist.length) {
+    commit(types.SET_PLAYING_STATE, false);
+  }
 };
 
 export const saveSearchHistory = function ({ commit }, queryString) {
@@ -91,4 +119,15 @@ export const deleteSearchHistory = function ({ commit }, queryString) {
 
 export const clearSearchHistory = function ({ commit }) {
   commit(types.SET_SEARCH_HISTORY, clearSearch());
+};
+
+export const deleteSongList = function ({ commit }) {
+  commit(types.SET_PLAYLIST, []);
+  commit(types.SET_SEQUENCE_LIST, []);
+  commit(types.SET_PLAYING_STATE, false);
+  commit(types.SET_CURRENT_INDEX, -1);
+};
+
+export const savePlayHistory = function ({ commit }, song) {
+  commit(types.SET_PLAY_HISTORY, savePlay(song));
 };

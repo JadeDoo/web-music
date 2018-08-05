@@ -16,7 +16,7 @@ export function getHotKey() {
   return jsonp(url, data, options);
 };
 
-export function search(queryString, page, searchid) {
+export function search(queryString, page, searchid, zhida) {
   // 50476130713660528
   // const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp';
   // queryString = encodeURIComponent(queryString);
@@ -48,7 +48,7 @@ export function search(queryString, page, searchid) {
     t: 0,
     aggr: 1,
     cr: 1,
-    catZhida: 1,
+    catZhida: zhida ? 1 : 0,
     lossless: 0,
     flag_qc: 0,
     p: page,

@@ -33,6 +33,10 @@ export default {
     queryString: {
       type: String,
       default: ""
+    },
+    showSinger: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -47,23 +51,25 @@ export default {
   },
   methods: {
     _search() {
-      search(this.queryString, this.page, this.searchid).then(res => {
-        if (res.code === ERR_OK) {
-          if (this.result.length > 0 && this.page !== 1) {
-            this._mapSong(res.data.song.list);
-          } else {
-            this._mapSong(res.data.song.list);
-            if (res.data.zhida && res.data.zhida.zhida_singer) {
-              this.result.unshift({
-                ...res.data.zhida.zhida_singer,
-                ...{ type: "singer" }
-              });
+      search(this.queryString, this.page, this.searchid, this.showSinger).then(
+        res => {
+          if (res.code === ERR_OK) {
+            if (this.result.length > 0 && this.page !== 1) {
+              this._mapSong(res.data.song.list);
+            } else {
+              this._mapSong(res.data.song.list);
+              if (res.data.zhida && res.data.zhida.zhida_singer) {
+                this.result.unshift({
+                  ...res.data.zhida.zhida_singer,
+                  ...{ type: "singer" }
+                });
+              }
             }
+            // console.log(res.data);
+            this._checkMore(res.data);
           }
-          // console.log(res.data);
-          this._checkMore(res.data);
         }
-      });
+      );
       // }, 500);
     },
     isSinger(item) {
@@ -95,7 +101,7 @@ export default {
       } else {
         this.insertSong(item);
       }
-      this.$emit('selected');
+      this.$emit("selected");
     },
     refresh() {
       this.$refs.scroll.refresh();

@@ -1,5 +1,5 @@
 import {playMode as mode} from "@/common/js/config.js";
-import {getSearch} from "@/common/js/cache.js";
+import {getSearch, getPlay} from "@/common/js/cache.js";
 const state = {
   singer: {},
   playing: false,
@@ -10,7 +10,8 @@ const state = {
   currentIndex: -1, // 当前播放
   disc: {},
   topList: {},
-  searchHistory: getSearch()
+  searchHistory: getSearch(),
+  playHistory: getPlay()
 };
 
 export default state;

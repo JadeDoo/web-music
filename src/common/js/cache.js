@@ -1,24 +1,7 @@
 const SEARCH_KEY = '__search__';
 const SEARCH_MAX_LENGTH = 15;
-
-// function insertArray(arr, val, maxLen) {
-//   // console.log(1);
-//   const index = arr.findIndex(item => {
-//     return item === val;
-//   });
-
-//   if (index === 0) {
-//     return;
-//   }
-//   if (index > 0) {
-//     arr.splice(index, 1);
-//     arr.unshift(val);
-//   }
-//   if (maxLen && arr.length > maxLen) {
-//     arr.pop();
-//   }
-//   console.log(arr);
-// };
+const PLAY_KEY = '__play__';
+const PLAY_MAX_LENGTH = 200;
 export function saveSearch(queryString) {
   // localStorage
   // 存储的是字符串
@@ -26,12 +9,11 @@ export function saveSearch(queryString) {
   if (!searches) {
     searches = [];
   } else {
-    searches = searches.indexOf(',') ? searches.split(',') : [searches];
+    searches = searches.indexOf(',') > -1 ? searches.split(',') : [searches];
   }
   let tempSet = new Set(searches);
   tempSet.delete(queryString);
-  tempSet.delete(',');
-  // tempSet.add(queryString);
+
   searches = Array.from(tempSet);
   searches.unshift(queryString);
   if (searches.length > SEARCH_MAX_LENGTH) {
@@ -39,6 +21,7 @@ export function saveSearch(queryString) {
   }
   // console.log(searches);
   localStorage.setItem(SEARCH_KEY, searches);
+  // console.log(searches);
   return searches;
 };
 
@@ -71,4 +54,40 @@ export function deleteSearch(queryString) {
 export function clearSearch() {
   localStorage.removeItem(SEARCH_KEY);
   return [];
+}
+
+export function savePlay(song) {
+  // localStorage存储为json 因为song为对象
+  // song = JSON.stringify(song);
+
+  let songs = localStorage.getItem(PLAY_KEY);
+  if (!songs) {
+    songs = [];
+  } else {
+    songs = JSON.parse(songs);
+  }
+  let tempSet = new Set(songs);
+  tempSet.forEach(item => {
+    if (item.id === song.id) {
+      tempSet.delete(item);
+    }
+  });
+  // tempSet.add(queryString);
+  songs = Array.from(tempSet);
+  songs.unshift(song);
+  if (songs.length > PLAY_MAX_LENGTH) {
+    songs.pop();
+  }
+  localStorage.setItem(PLAY_KEY, JSON.stringify(songs));
+  return songs;
+};
+
+export function getPlay() {
+  let songs = localStorage.getItem(PLAY_KEY);
+  if (!songs) {
+    songs = [];
+  } else {
+    songs = JSON.parse(songs);
+  }
+  return songs;
 }
