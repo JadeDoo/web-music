@@ -58,7 +58,7 @@
               <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon i-right">
-              <i class="icon icon-not-favorite"></i>
+              <i @click="toggleFavorite(currentSong)" class="icon" :class="getFavoriteIcon(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -131,7 +131,11 @@ export default {
       }
       this.setPlayingState(!this.playing);
       if (this.currentLyric) {
-        this.currentLyric.togglePlay();
+        if (this.playing) {
+          this.currentLyric.play();
+        } else {
+          this.currentLyric.stop();
+        }
       }
     },
     prev() {
@@ -238,7 +242,7 @@ export default {
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN"
     }),
-    ...mapActions(['savePlayHistory'])
+    ...mapActions(["savePlayHistory"])
   },
   watch: {
     currentSong(newSong, oldSong) {
@@ -254,6 +258,9 @@ export default {
         this.currentSong
           .getLyric()
           .then(lyric => {
+            if (this.currentSong.lyric !== lyric) {
+              return;
+            }
             this.currentLyric = new Lyric(lyric, this.handlerLyric);
             if (this.playing) {
               this.currentLyric.play();

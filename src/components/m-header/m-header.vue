@@ -2,6 +2,9 @@
   <div class="m-header">
     <div class="icon"></div>
     <h1 class="text">Chicken Music</h1>
+    <router-link to="/user" class="user" tag="div">
+      <i class="icon-mine"></i>
+    </router-link>
   </div>
 </template>
 
@@ -35,7 +38,7 @@ export default {};
     line-height: 44px;
     font-size: $font-size-large;
   }
-  .mine {
+  .user {
     position: absolute;
     top: 0;
     right: 0;

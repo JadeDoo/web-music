@@ -2,6 +2,8 @@ const SEARCH_KEY = '__search__';
 const SEARCH_MAX_LENGTH = 15;
 const PLAY_KEY = '__play__';
 const PLAY_MAX_LENGTH = 200;
+const FAVORITE_KEY = '__favorite__';
+const FAVORITE_MAX_LENGTH = 200;
 export function saveSearch(queryString) {
   // localStorage
   // 存储的是字符串
@@ -75,6 +77,9 @@ export function savePlay(song) {
   // tempSet.add(queryString);
   songs = Array.from(tempSet);
   songs.unshift(song);
+  if (songs.length > FAVORITE_MAX_LENGTH) {
+    songs.pop();
+  }
   if (songs.length > PLAY_MAX_LENGTH) {
     songs.pop();
   }
@@ -89,5 +94,51 @@ export function getPlay() {
   } else {
     songs = JSON.parse(songs);
   }
+  return songs;
+};
+
+export function saveFavorite(song) {
+  let songs = localStorage.getItem(FAVORITE_KEY);
+  if (!songs) {
+    songs = [];
+  } else {
+    songs = JSON.parse(songs);
+  };
+  let tempSet = new Set(songs);
+  tempSet.forEach(item => {
+    if (item.id === song.id) {
+      tempSet.delete(item);
+    }
+  });
+  songs = Array.from(tempSet);
+  songs.unshift(song);
+  localStorage.setItem(FAVORITE_KEY, JSON.stringify(songs));
+  return songs;
+};
+export function deleteFavorite(song) {
+  let songs = localStorage.getItem(FAVORITE_KEY);
+  if (!songs) {
+    songs = [];
+  } else {
+    songs = JSON.parse(songs);
+  };
+  let tempSet = new Set(songs);
+  tempSet.forEach(item => {
+    if (item.id === song.id) {
+      tempSet.delete(item);
+    }
+  });
+  songs = Array.from(tempSet);
+  localStorage.setItem(FAVORITE_KEY, JSON.stringify(songs));
+  return songs;
+};
+
+export function getFavorite() {
+  let songs = localStorage.getItem(FAVORITE_KEY);
+  if (!songs) {
+    songs = [];
+  } else {
+    songs = JSON.parse(songs);
+  };
   return songs;
 }

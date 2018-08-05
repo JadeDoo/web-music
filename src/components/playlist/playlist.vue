@@ -15,7 +15,7 @@
               <i class="current" :class="{'icon-play':item.id===currentSong.id}"></i>
               <span class="text">{{item.name}}</span>
               <span class="like">
-                <i class="icon-not-favorite"></i>
+                <i @click.stop.self="toggleFavorite(item)" :class="getFavoriteIcon(item)"></i>
               </span>
               <span class="delete" @click.stop="deleteItem(item)">
                 <i class="icon-delete"></i>

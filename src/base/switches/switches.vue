@@ -1,6 +1,6 @@
 <template>
   <ul class="switches">
-    <li @click="switchItem(index)" class="switch-item" :class="{'active':tagIndex === index}" v-for="(item,index) in switches" :key="index">
+    <li @click="switchTag(index)" class="switch-tag" :class="{'active':tagIndex === index}" v-for="(item,index) in switches" :key="index">
       <span>{{item.name}}</span>
     </li>
   </ul>
@@ -19,7 +19,7 @@ export default {
     }
   },
   methods: {
-    switchItem(index) {
+    switchTag(index) {
       this.$emit("switched", index);
     }
   }
@@ -36,7 +36,7 @@ export default {
   margin: 0 auto;
   border: 1px solid $color-highlight-background;
   border-radius: 5px;
-  .switch-item {
+  .switch-tag {
     flex: 1;
     padding: 0;
     text-align: center;

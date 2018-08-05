@@ -11,7 +11,7 @@
         <search-input @inputed="onQueryStringChange" placeholder="搜索歌曲" ref="search-input"></search-input>
       </div>
       <div class="shortcut" v-show="!queryString">
-        <switches @switched="switchItem" :tagIndex="tagIndex" :switches="switches"></switches>
+        <switches @switched="switchTag" :tagIndex="tagIndex" :switches="switches"></switches>
         <div class="list-wrapper">
           <scroll ref="list-scroll" class="list-scroll" :data="playHistory" v-if="tagIndex===0">
             <div class="list-inner">
@@ -77,7 +77,7 @@ export default {
       this.saveQueryString();
       this.$refs["top-tip"].toggleShow();
     },
-    switchItem(index) {
+    switchTag(index) {
       this.tagIndex = index;
     },
     selectSong(song, index) {
