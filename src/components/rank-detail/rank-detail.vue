@@ -37,7 +37,7 @@ export default {
       }
       getSongList().then(res => {
         this.songs = this._mapSong(res.songlist);
-        console.log(this.songs);
+        // console.log(this.songs);
       });
     },
     _mapSong(list) {

@@ -62,7 +62,7 @@ export default {
   methods: {
     toggleShow() {
       this.isShow = !this.isShow;
-      console.log(this.$refs["list-scroll"]);
+      // console.log(this.$refs["list-scroll"]);
       if (this.isShow) {
         setTimeout(() => {
           if (this.tagIndex === 0) {
