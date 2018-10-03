@@ -1,13 +1,13 @@
-var express = require('express')
+﻿var express = require('express')
 var config = require('./config/index')
 var axios = require('axios')
 // 在mode为history下也可以访问
-var history = require('connect-history-api-fallback');
+// var history = require('connect-history-api-fallback');
 
 var port = process.env.PORT || config.build.port
 
 var app = express()
-app.use(history())
+// app.use(history())
 var apiRoutes = express.Router()
 
 apiRoutes.get('/discList', function (req, res) {

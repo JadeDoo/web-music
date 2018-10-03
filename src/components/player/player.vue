@@ -458,14 +458,21 @@ export default {
       width: 100%;
       .operators {
         display: flex;
-        justify-content: center;
+        width: 80%;
+        margin: 0 auto;
+        justify-content: space-between;
         align-items: center;
         .icon {
           // flex: 1;
-          padding: 0 20px;
+          // padding: 0 20px;
           color: $color-theme;
           i {
             font-size: 30px;
+          }
+          &.i-center{
+            i{
+              font-size: 40px;
+            }
           }
           .icon-favorite {
             color: $color-sub-theme;

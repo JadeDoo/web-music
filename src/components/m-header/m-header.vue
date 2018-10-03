@@ -30,6 +30,7 @@ export default {};
     height: 32px;
     margin-right: 9px;
     background-image: bg-image(logo);
+    background-repeat: no-repeat;
     background-size: 30px 30px;
   }
   .text {

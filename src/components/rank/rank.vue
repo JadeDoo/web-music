@@ -95,7 +95,12 @@ export default {
     .item {
       display: flex;
       height: 100px;
-      margin: 0 20px;
+      margin: 0 5%;
+      width: 90%;
+      text-overflow: ellipsis;
+          // white-space: nowrap;
+      // max-width: 335px;
+      overflow: hidden;
       padding-top: 20px;
       &:last-child {
         padding-bottom: 20px;
@@ -127,6 +132,8 @@ export default {
           line-height: 20px;
           @include no-wrap();
           font-size: $font-size-small;
+          // max-width: 200px;
+          // overflow: hidden;
           .singername {
             color: $color-text-d;
           }

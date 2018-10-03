@@ -19,6 +19,8 @@ Vue.use(VueLazyLoad, {
   loading: require('common/images/default.png')
 });
 
+console.log('技术栈：vue + vuex + vue-router + axios + express + better-scroll + scss');
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
